@@ -1,4 +1,5 @@
 import openke
+import sys
 from openke.config import Trainer, Tester
 from openke.module.model import SimplE
 from openke.module.loss import SoftplusLoss
@@ -37,9 +38,14 @@ model = NegativeSampling(
 
 
 # train the model
-trainer = Trainer(model = model, data_loader = train_dataloader, train_times = 2000, alpha = 0.5, use_gpu = True, opt_method = "adagrad")
-trainer.run()
-simple.save_checkpoint('./checkpoint/simple.ckpt')
+if len(sys.argv) == 0:
+	trainer = Trainer(model = model, data_loader = train_dataloader, train_times = 2000, alpha = 0.5, use_gpu = True, opt_method = "adagrad")
+	trainer.run()
+	simple.save_checkpoint('./checkpoint/simple.ckpt')
+else:
+	simple.load_checkpoint('./checkpoint/simple.ckpt')
+	trainer = Trainer(model = simple, data_loader = train_dataloader, train_times = 500, alpha = 0.5, use_gpu = True, opt_method = "adagrad")
+	simple.save_checkpoint('./checkpoint/simple.ckpt')
 
 # test the model
 simple.load_checkpoint('./checkpoint/simple.ckpt')
