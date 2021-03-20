@@ -39,13 +39,15 @@ model = NegativeSampling(
 
 # train the model
 if len(sys.argv) == 1:
-	trainer = Trainer(model = model, data_loader = train_dataloader, train_times = 2000, alpha = 0.5, use_gpu = True, opt_method = "adagrad")
+	trainer = Trainer(model = model, data_loader = train_dataloader, train_times = 500, alpha = 0.5, use_gpu = True, opt_method = "adagrad")
 	trainer.run()
 	simple.save_checkpoint('./checkpoint/simple.ckpt')
+	simple.save_parameters('./parameters/simple.json')
 elif len(sys.argv) == 2:
 	simple.load_checkpoint('./checkpoint/simple.ckpt')
-	trainer = Trainer(model = simple, data_loader = train_dataloader, train_times = 500, alpha = 0.5, use_gpu = True, opt_method = "adagrad")
+	trainer = Trainer(model = simple, data_loader = train_dataloader, train_times = 200, alpha = 0.5, use_gpu = True, opt_method = "adagrad")
 	simple.save_checkpoint('./checkpoint/simple.ckpt')
+	simple.save_parameters('./parameters/simple.json')
 
 # test the model
 simple.load_checkpoint('./checkpoint/simple.ckpt')
