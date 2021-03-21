@@ -4,7 +4,7 @@ import numpy as np
 import random
 import shutil
 
-default_repo = '../../benchmarks/WN18RR/'
+default_repo = '/export/data/zjiaad/OpenKE/openke/data/benchmarks/WN18RR/'
 
 entity_dict_file = default_repo + 'entity2id.txt'
 relation_dict_file = default_repo + 'relation2id.txt'
