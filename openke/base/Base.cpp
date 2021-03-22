@@ -172,8 +172,8 @@ void sampling(
 		bool p = false, 
 		bool val_loss = false
 ) {
-	pthread_t *pt = (pthread_t *)malloc(workThreads * sizeof(pthread_t));
-	Parameter *para = (Parameter *)malloc(workThreads * sizeof(Parameter));
+	pthread_t *pt = (pthread_t *)malloc(workThreads * sizeof(pthread_t) * 2);
+	Parameter *para = (Parameter *)malloc(workThreads * sizeof(Parameter) * 2);
 	for (INT threads = 0; threads < workThreads; threads++) {
 		para[threads].id = threads;
 		para[threads].batch_h = batch_h;
