@@ -6,6 +6,7 @@ import shutil
 
 # default_repo = '/export/data/zjiaad/OpenKE/benchmarks/WN18RR/'
 default_repo = '../../benchmarks/WN18RR/'
+out_repo = '../../benchmarks/WN18RR_1'
 
 entity_dict_file = default_repo + 'entity2id.txt'
 relation_dict_file = default_repo + 'relation2id.txt'
@@ -15,7 +16,7 @@ entity_df.columns = ["A","B"]
 entity_dict = dict(zip(entity_df["A"], entity_df["B"]))
 n_entity = len(entity_dict)
 entities = list(entity_dict.values())
-print(6186301 in entity_dict)
+#print(6186301 in entity_dict)
 print('#entity: {}'.format(n_entity))
 print('-----Loading relation dict-----')
 relation_df = pd.read_csv(relation_dict_file, header=0, sep='\t')
@@ -33,6 +34,7 @@ training_triples = list(zip([entity_dict[h] for h in training_df[0]],
                             [relation_dict[r] for r in training_df[2]]))
 n_training_triple = len(training_triples)
 np.savetxt(default_repo + "train2id.txt", training_triples, fmt='%d', delimiter=' ')
+shutil.copyfile(default_repo + "train2id.txt", out_repo + "train2id.txt")
 print('#training triple: {}'.format(n_training_triple))
 print('-----Loading validation triples-----')
 validation_df = pd.read_table(validation_file, header=None)
@@ -40,7 +42,8 @@ validation_triples = list(zip([entity_dict[h] for h in validation_df[0]],
                               [entity_dict[t] for t in validation_df[1]],
                               [relation_dict[r] for r in validation_df[2]]))
 n_validation_triple = len(validation_triples)
-np.savetxt(default_repo + "validation2id.txt", validation_triples, fmt='%d', delimiter=' ')
+np.savetxt(default_repo + "valid2id.txt", validation_triples, fmt='%d', delimiter=' ')
+shutil.copyfile(default_repo + "valid2id.txt", out_repo + "valid2id.txt")
 print('#validation triple: {}'.format(n_validation_triple))
 print('-----Loading test triples------')
 test_df = pd.read_table(test_file, header=None)
@@ -49,21 +52,22 @@ test_triples = list(zip([entity_dict[h] for h in test_df[0]],
                         [relation_dict[r] for r in test_df[2]]))
 n_test_triple = len(test_triples)
 np.savetxt(default_repo + "test2id.txt", test_triples, fmt='%d', delimiter=' ')
+shutil.copyfile(default_repo + "test2id.txt", out_repo + "test2id.txt")
 
 i = 0
 
 entity_id = 40942
 relation_id = 17
 
-if os.path.exists(default_repo + "train_2.txt"):
-    os.remove(default_repo + "train_2.txt")
-shutil.copyfile(default_repo + "train.txt", default_repo + "train_2.txt")
-if os.path.exists(default_repo + "entity2id_add.txt"):
-    os.remove(default_repo + "entity2id_add.txt")
-shutil.copyfile(default_repo + "entity2id.txt", default_repo + "entity2id_add.txt")
+if os.path.exists(out_repo + "train.txt"):
+    os.remove(out_repo + "train.txt")
+shutil.copyfile(default_repo + "train.txt", out_repo + "train.txt")
+if os.path.exists(out_repo + "entity2id.txt"):
+    os.remove(out_repo + "entity2id.txt")
+shutil.copyfile(default_repo + "entity2id.txt", out_repo + "entity2id.txt")
 
-output_file = open(default_repo + "train_2.txt", "a")
-entity_file = open(default_repo + "entity2id_add.txt", "a")
+output_file = open(out_repo + "train.txt", "a")
+entity_file = open(out_repo + "entity2id.txt", "a")
 
 new_entities = [32786788,
                 63833825,
@@ -85,27 +89,12 @@ while i < 5:
 
 output_file.close()
 
-training_file = default_repo + 'train_2.txt'
-validation_file = default_repo + 'valid.txt'
-test_file = default_repo + 'test.txt'
+training_file = out_repo + 'train.txt'
 print('-----Loading training triples-----')
 training_df = pd.read_table(training_file, header=None)
 training_triples_2 = list(zip([entity_dict[h] for h in training_df[0]],
                               [entity_dict[t] for t in training_df[1]],
                               [relation_dict[r] for r in training_df[2]]))
-np.savetxt(default_repo + "train2id_add.txt", training_triples_2, fmt='%d', delimiter=' ')
+np.savetxt(out_repo + "train2id.txt", training_triples_2, fmt='%d', delimiter=' ')
 n_training_triple = len(training_triples)
 print('#training triple: {}'.format(n_training_triple))
-print('-----Loading validation triples-----')
-validation_df = pd.read_table(validation_file, header=None)
-validation_triples = list(zip([entity_dict[h] for h in validation_df[0]],
-                              [entity_dict[t] for t in validation_df[1]],
-                              [relation_dict[r] for r in validation_df[2]]))
-n_validation_triple = len(validation_triples)
-print('#validation triple: {}'.format(n_validation_triple))
-print('-----Loading test triples------')
-test_df = pd.read_table(test_file, header=None)
-test_triples = list(zip([entity_dict[h] for h in test_df[0]],
-                        [entity_dict[t] for t in test_df[1]],
-                        [relation_dict[r] for r in test_df[2]]))
-n_test_triple = len(test_triples)

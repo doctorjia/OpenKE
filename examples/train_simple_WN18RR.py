@@ -8,7 +8,7 @@ from openke.data import TrainDataLoader, TestDataLoader
 
 # dataloader for training
 train_dataloader = TrainDataLoader(
-	in_path = "./benchmarks/WN18RR/", 
+	in_path = sys.argv[1],
 	nbatches = 100,
 	threads = 8, 
 	sampling_mode = "normal", 
@@ -38,18 +38,24 @@ model = NegativeSampling(
 
 
 # train the model
-if len(sys.argv) == 1:
+if len(sys.argv) == 2:
 	trainer = Trainer(model = model, data_loader = train_dataloader, train_times = 500, alpha = 0.5, use_gpu = True, opt_method = "adagrad")
 	trainer.run()
 	simple.save_checkpoint('./checkpoint/simple.ckpt')
 	simple.save_parameters('./parameters/simple.json')
-elif len(sys.argv) == 2:
+elif len(sys.argv) == 3:
 	simple.load_checkpoint('./checkpoint/simple.ckpt')
 	trainer = Trainer(model = simple, data_loader = train_dataloader, train_times = 200, alpha = 0.5, use_gpu = True, opt_method = "adagrad")
-	simple.save_checkpoint('./checkpoint/simple.ckpt')
-	simple.save_parameters('./parameters/simple.json')
+	trainer.run()
+	simple.save_checkpoint('./checkpoint/simple'+sys.argv[2]+'.ckpt')
+	simple.save_parameters('./parameters/simple'+sys.argv[2]+'.json')
 
 # test the model
-simple.load_checkpoint('./checkpoint/simple.ckpt')
-tester = Tester(model = simple, data_loader = test_dataloader, use_gpu = True)
-tester.run_link_prediction(type_constrain = False)
+if len(sys.argv) == 1:
+	simple.load_checkpoint('./checkpoint/simple.ckpt')
+	tester = Tester(model = simple, data_loader = test_dataloader, use_gpu = True)
+	tester.run_link_prediction(type_constrain = False)
+else:
+	simple.load_checkpoint('./checkpoint/simple'+sys.argv[1]+'.ckpt')
+	tester = Tester(model=simple, data_loader=test_dataloader, use_gpu=True)
+	tester.run_link_prediction(type_constrain=False)
