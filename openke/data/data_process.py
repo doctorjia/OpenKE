@@ -4,20 +4,23 @@ import numpy as np
 import random
 import shutil
 
-default_repo = '/export/data/zjiaad/OpenKE/benchmarks/WN18RR/'
+# default_repo = '/export/data/zjiaad/OpenKE/benchmarks/WN18RR/'
+default_repo = '../../benchmarks/WN18RR/'
 
 entity_dict_file = default_repo + 'entity2id.txt'
 relation_dict_file = default_repo + 'relation2id.txt'
 
-entity_df = pd.read_table(entity_dict_file, header=None)
-entity_dict = dict(zip(entity_df[0], entity_df[1]))
+entity_df = pd.read_csv(entity_dict_file, header=0, sep='\t')
+entity_df.columns = ["A","B"]
+entity_dict = dict(zip(entity_df["A"], entity_df["B"]))
 n_entity = len(entity_dict)
 entities = list(entity_dict.values())
 print(6186301 in entity_dict)
 print('#entity: {}'.format(n_entity))
 print('-----Loading relation dict-----')
-relation_df = pd.read_table(relation_dict_file, header=None)
-relation_dict = dict(zip(relation_df[0], relation_df[1]))
+relation_df = pd.read_csv(relation_dict_file, header=0, sep='\t')
+relation_df.columns = ["A", "B"]
+relation_dict = dict(zip(relation_df["A"], relation_df["B"]))
 n_relation = len(relation_dict)
 
 training_file = default_repo + 'train.txt'
@@ -55,9 +58,12 @@ relation_id = 17
 if os.path.exists(default_repo + "train_2.txt"):
     os.remove(default_repo + "train_2.txt")
 shutil.copyfile(default_repo + "train.txt", default_repo + "train_2.txt")
+if os.path.exists(default_repo + "entity2id_add.txt"):
+    os.remove(default_repo + "entity2id_add.txt")
+shutil.copyfile(default_repo + "entity2id.txt", default_repo + "entity2id_add.txt")
 
 output_file = open(default_repo + "train_2.txt", "a")
-entity_file = open(default_repo + "entity2id_add.txt", "w")
+entity_file = open(default_repo + "entity2id_add.txt", "a")
 
 new_entities = [32786788,
                 63833825,

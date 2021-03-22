@@ -1,3 +1,5 @@
+import sys
+
 lef = {}
 rig = {}
 rellef = {}
@@ -7,7 +9,9 @@ triple = open("train2id.txt", "r")
 valid = open("valid2id.txt", "r")
 test = open("test2id.txt", "r")
 
-tot = (int)(triple.readline())
+#first_line = triple.readline()
+#tot = (int)(triple.readline().split()[0])
+tot = int(sys.argv[1])
 for i in range(tot):
 	content = triple.readline()
 	h,t,r = content.strip().split()
@@ -24,7 +28,8 @@ for i in range(tot):
 	rellef[r][h] = 1
 	relrig[r][t] = 1
 
-tot = (int)(valid.readline())
+#tot = (int)(valid.readline())
+tot = int(sys.argv[2])
 for i in range(tot):
 	content = valid.readline()
 	h,t,r = content.strip().split()
@@ -41,7 +46,8 @@ for i in range(tot):
 	rellef[r][h] = 1
 	relrig[r][t] = 1
 
-tot = (int)(test.readline())
+#tot = (int)(test.readline())
+tot = int(sys.argv[3])
 for i in range(tot):
 	content = test.readline()
 	h,t,r = content.strip().split()
@@ -100,7 +106,7 @@ s1n=0
 sn1=0
 snn=0
 f = open("test2id.txt", "r")
-tot = (int)(f.readline())
+tot = int(sys.argv[3])
 for i in range(tot):
 	content = f.readline()
 	h,t,r = content.strip().split()
@@ -123,7 +129,7 @@ f1n = open("1-n.txt", "w")
 fn1 = open("n-1.txt", "w")
 fnn = open("n-n.txt", "w")
 fall = open("test2id_all.txt", "w")
-tot = (int)(f.readline())
+tot = int(sys.argv[3])
 fall.write("%d\n"%(tot))
 f11.write("%d\n"%(s11))
 f1n.write("%d\n"%(s1n))
