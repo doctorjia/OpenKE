@@ -4,4 +4,5 @@ timeStamp=`date -d "$current" +%s`
 currentTimeStamp=$((timeStamp+`date "+%N"`/1000))
 train_simple_WN18RR.py ./benchmarks/WN18RR/
 ./openke/data/data_process.py
+./benchmarks/WN18RR_1/n-n.py
 train_simple_WN18RR.py ./benchmarks/WN18RR_1 currentTimeStamp
