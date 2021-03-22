@@ -19,7 +19,7 @@ train_dataloader = TrainDataLoader(
 )
 
 # dataloader for test
-test_dataloader = TestDataLoader("./benchmarks/WN18RR/", "link")
+test_dataloader = TestDataLoader(sys.argv[1], "link")
 
 # define the model
 simple = SimplE(
@@ -51,11 +51,11 @@ elif len(sys.argv) == 3:
 	simple.save_parameters('./parameters/simple'+sys.argv[2]+'.json')
 
 # test the model
-if len(sys.argv) == 1:
+if len(sys.argv) == 2:
 	simple.load_checkpoint('./checkpoint/simple.ckpt')
 	tester = Tester(model = simple, data_loader = test_dataloader, use_gpu = True)
 	tester.run_link_prediction(type_constrain = False)
-else:
+elif len(sys.argv) == 3:
 	simple.load_checkpoint('./checkpoint/simple'+sys.argv[1]+'.ckpt')
 	tester = Tester(model=simple, data_loader=test_dataloader, use_gpu=True)
 	tester.run_link_prediction(type_constrain=False)
