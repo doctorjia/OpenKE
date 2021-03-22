@@ -19,7 +19,7 @@ train_dataloader = TrainDataLoader(
 )
 
 # dataloader for test
-test_dataloader = TestDataLoader(sys.argv[1], "link")
+test_dataloader = TestDataLoader(sys.argv[1], "link", type_constrain=False)
 
 # define the model
 simple = SimplE(
