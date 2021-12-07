@@ -73,7 +73,7 @@ void importTrainFiles() {
 	fclose(fin);
 
     if (train_file == "")
-        fin = fopen((inPath + "train2id.txt").c_str(), "r");
+        fin = fopen((inPath + "train2id_0.txt").c_str(), "r");
     else
         fin = fopen(train_file.c_str(), "r");
 	tmp = fscanf(fin, "%ld", &trainTotal);
