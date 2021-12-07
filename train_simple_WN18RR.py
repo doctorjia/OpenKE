@@ -21,7 +21,7 @@ def load_data(timestamp):
     )
 
     # dataloader for test
-    test_dataloader = TestDataLoader("./benchmarks/archive" + str(timestamp), "link")
+    test_dataloader = TestDataLoader("./benchmarks/archive_" + str(timestamp), "link")
 
     # define the model
     simple = SimplE(
@@ -42,29 +42,28 @@ def load_data(timestamp):
 
 
 # train the model
-if len(sys.argv) == 2:
-    train_dataloader_0, test_dataloader_0, simple_0, model_0 = load_data("0")
-    trainer = Trainer(model = model_0, data_loader = train_dataloader_0, train_times = 500, alpha = 0.5, use_gpu = True,
+train_dataloader_0, test_dataloader_0, simple_0, model_0 = load_data("0")
+trainer = Trainer(model = model_0, data_loader = train_dataloader_0, train_times = 500, alpha = 0.5, use_gpu = True,
+                  opt_method = "adagrad")
+trainer.run()
+simple_0.save_checkpoint('./checkpoint/simple_0.ckpt')
+simple_0.save_parameters('./parameters/simple_0.json')
+simple_0.load_checkpoint('./checkpoint/simple_0.ckpt')
+tester = Tester(model = simple_0, data_loader = test_dataloader_0, use_gpu = True)
+tester.run_link_prediction(type_constrain = False)
+
+for i in range(5):
+    train_dataloader_now, test_dataloader_now, simple_now, model_now = load_data(str(i + 1))
+    simple_now.load_checkpoint('./checkpoint/simple_' + str(i) + '.ckpt')
+    trainer = Trainer(model = simple_now, data_loader = train_dataloader_now, train_times = 200, alpha = 0.5, use_gpu = True,
                       opt_method = "adagrad")
     trainer.run()
-    simple_0.save_checkpoint('./checkpoint/simple_0.ckpt')
-    simple_0.save_parameters('./parameters/simple_0.json')
-    simple_0.load_checkpoint('./checkpoint/simple_0.ckpt')
-    tester = Tester(model = simple_0, data_loader = test_dataloader_0, use_gpu = True)
+    simple_now.save_checkpoint('./checkpoint/simple_' + str(i+1) + '.ckpt')
+    simple_now.save_parameters('./parameters/simple_' + str(i+1) + '.json')
+
+    simple_now.load_checkpoint('./checkpoint/simple_' + str(i+1) + '.ckpt')
+    tester = Tester(model = simple_now, data_loader = test_dataloader_now, use_gpu = True)
     tester.run_link_prediction(type_constrain = False)
-
-    for i in range(5):
-        train_dataloader_now, test_dataloader_now, simple_now, model_now = load_data(str(i + 1))
-        simple_now.load_checkpoint('./checkpoint/simple_' + str(i) + '.ckpt')
-        trainer = Trainer(model = simple_now, data_loader = train_dataloader_now, train_times = 200, alpha = 0.5, use_gpu = True,
-                          opt_method = "adagrad")
-        trainer.run()
-        simple_now.save_checkpoint('./checkpoint/simple' + str(i) + '.ckpt')
-        simple_now.save_parameters('./parameters/simple' + str(i) + '.json')
-
-        simple_now.load_checkpoint('./checkpoint/simple.ckpt')
-        tester = Tester(model = simple_now, data_loader = test_dataloader_now, use_gpu = True)
-        tester.run_link_prediction(type_constrain = False)
 
 # test the model
 # if len(sys.argv) == 2:
