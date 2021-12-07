@@ -99,7 +99,7 @@ s11=0
 s1n=0
 sn1=0
 snn=0
-f = open("test2id.txt", "r")
+f = open("test2id_0.txt", "r")
 tot = (int)(f.readline())
 for i in range(tot):
 	content = f.readline()
