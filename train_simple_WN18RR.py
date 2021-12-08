@@ -1,5 +1,6 @@
 import openke
 import sys
+import os
 import time
 from openke.config import Trainer, Tester
 from openke.module.model import SimplE
@@ -7,6 +8,7 @@ from openke.module.loss import SoftplusLoss
 from openke.module.strategy import NegativeSampling
 from openke.data import TrainDataLoader, TestDataLoader
 
+os.environ['CUDA_VISIBLE_DEVICES'] = '2, 3'
 
 # dataloader for training
 def load_data(timestamp):
