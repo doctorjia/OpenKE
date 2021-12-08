@@ -15,7 +15,7 @@ class BaseModule(nn.Module):
 
 	def load_checkpoint(self, path):
 		self.load_state_dict(torch.load(os.path.join(path)))
-		self.eval()
+		# self.eval()
 
 	def save_checkpoint(self, path):
 		torch.save(self.state_dict(), path)
