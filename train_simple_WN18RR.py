@@ -63,9 +63,16 @@ ed_time = time.time()
 print("Link prediction time for timestamp 0: ", ed_time - st_time)
 
 for i in range(5):
+    train_dataloader_old, test_dataloader_old, simple_old, model_old = load_data(str(i + 1))
     train_dataloader_now, test_dataloader_now, simple_now, model_now = load_data(str(i + 1))
     st_time = time.time()
-    simple_now.load_checkpoint('./checkpoint/simple_' + str(i) + '.ckpt')
+    simple_old.load_checkpoint('./checkpoint/simple_' + str(i) + '.ckpt')
+    old_dict = simple_old.state_dict()
+    new_dict = simple_now.state_dict()
+    old_dict = {k: v for k, v in old_dict.items() if k in new_dict.items()}
+    new_dict.update(old_dict)
+    simple_now.load_state_dict(new_dict)
+    
     simple_now.train()
     trainer = Trainer(model = simple_now, data_loader = train_dataloader_now, train_times = 100, alpha = 0.5, use_gpu = True,
                       opt_method = "adagrad")
